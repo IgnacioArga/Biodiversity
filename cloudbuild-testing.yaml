@@ -5,7 +5,7 @@ steps:
   args: 
     - '-c'
     - |
-      docker pull gcr.io/"personal-cloud-397320"/Biodiversity:latest || exit 0
+      docker pull gcr.io/personal-cloud-397320/Biodiversity:latest || exit 0
 - id: docker build
   name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
