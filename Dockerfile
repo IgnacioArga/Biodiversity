@@ -15,15 +15,6 @@ RUN apt-get install -y libgdal-dev default-libmysqlclient-dev libmysqlclient-dev
 
 COPY shiny-customized.config /etc/shiny-server/shiny-server.conf
 
-# --- Google Cloud CLI --- #
-
-ARG ARG_PROJECT_ID
-ENV PROJECT_ID biodiversity-testing-y
-    
-RUN mkdir gcp
-
-COPY app/gcp gcp
-
 # --- Instalo renv y copio lock.file --- #
 
 RUN rm -rf /srv/*
