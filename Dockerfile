@@ -18,7 +18,7 @@ COPY shiny-customized.config /etc/shiny-server/shiny-server.conf
 # --- Google Cloud CLI --- #
 
 ARG ARG_PROJECT_ID
-ENV PROJECT_ID $ARG_PROJECT_ID-y
+ENV PROJECT_ID biodiversity-testing-y
     
 RUN mkdir gcp
 
