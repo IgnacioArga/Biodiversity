@@ -12,13 +12,12 @@ steps:
   args:
     - '-c'
     - |
-      docker build -t gcr.io/"personal-cloud-397320"/Biodiversity \
-      --cache-from gcr.io/"personal-cloud-397320"/Biodiversity:latest \
+      docker build -t gcr.io/personal-cloud-397320/Biodiversity \
+      --cache-from gcr.io/personal-cloud-397320/Biodiversity:latest \
       .
-  secretEnv: ['GITHUB_PAT', 'DATA_DB_COHEN_U', 'DATA_DB_COHEN_P', 'DATA_DB_INGE_U', 'DATA_DB_INGE_P', 'SERVICE_ACCOUNT_GCS']
 - id: docker push
   name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/"personal-cloud-397320"/Biodiversity']
+  args: ['push', 'gcr.io/personal-cloud-397320/Biodiversity']
 - id: deploy to cloud run
   name: 'gcr.io/cloud-builders/gcloud'
   args:
