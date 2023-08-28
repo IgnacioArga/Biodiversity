@@ -1,0 +1,23 @@
+Package: Dashboard-Marketing
+Title: Dashboard-Marketing
+Version: 1.0.1
+Description: What the package does (one paragraph).
+Imports: 
+    bigrquery,
+    config,
+    DT,
+    leaflet,
+    openxlsx,
+    pool,
+    rCohen,
+    rpivotTable,
+    sever,
+    shinydashboardPlus,
+    shinyFeedback,
+    shinyjs,
+    shinyWidgets,
+    usethis
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.0
