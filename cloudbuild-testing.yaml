@@ -25,7 +25,7 @@ steps:
   - deploy
   - Biodiversity 
   - --image
-  - gcr.io/"personal-cloud-397320"/Biodiversity
+  - gcr.io/personal-cloud-397320/Biodiversity
   - --region
   - us-central1
   - --platform
@@ -40,6 +40,6 @@ steps:
   - --allow-unauthenticated
 
 images:
-- gcr.io/"personal-cloud-397320"/Biodiversity
+- gcr.io/personal-cloud-397320/Biodiversity
 
 timeout: 14400s
