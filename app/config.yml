@@ -1,0 +1,5 @@
+default:
+  bigquery:
+    project: 'personal-cloud-397320'
+  estilos:
+    color_principal: '#4a7b9d'
