@@ -1,0 +1,14 @@
+/* login setings*/
+
+.skin-black .left-side, .skin-black .main-sidebar, .skin-black .wrapper {
+  visibility: hidden;
+}
+
+#shiny-modal {
+  background-image: url('//api.gbif.org/v1/image/unsafe/1500x750/http:%2F%2Fimages.ctfassets.net%2Fuo17ejk9rkwj%2F1PsclS0lrJHDGHoSdd0Mz4%2F9797496d803cb4a0903ac3c1f6441c60%2Fimage.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition-duration: 10000ms;
+  transition-property: background-image;
+}

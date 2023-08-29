@@ -1,33 +1,98 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+# UI ----------------------------------------------------------------------
 
-library(shiny)
-
-# Define UI for application that draws a histogram
-fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("distPlot")
-        )
+dashboardPage(
+  skin = "black",
+  title = "Cohen - Comercial",
+  freshTheme = create_theme(
+    adminlte_global(
+      content_bg  = "#fcfcfc",
+      box_bg      = "#ffffff",
+      info_box_bg = "#ffffff"
+    ),
+    adminlte_sidebar(
+      dark_bg                  = "#af2613f7",  # Rojo predominante
+      dark_hover_bg            = "#8F271C",  # Rojo más oscuro para el hover
+      dark_color               = "#d6d2d9",
+      dark_submenu_bg          = "#000000",  # Rojo oscuro para los submenús
+      dark_submenu_color       = "#b2b2b2",
+      dark_submenu_hover_color = "#ffffff"
+    ),
+    adminlte_color(
+      light_blue = "#00529F",  
+      red        = "#D13823",
+      green      = "#008F4F",
+      aqua       = "#00A3CC",
+      yellow     = "#D5880B",
+      blue       = "#005A8F",
+      navy       = "#000A14",
+      teal       = "#2EB2B2",
+      olive      = "#348360",
+      lime       = "#00E061",
+      orange     = "#F57200",
+      fuchsia    = "#D30DA5",
+      purple     = "#524F92",
+      maroon     = "#B61651",
+      black      = NULL,
+      gray_lte   = "#C4C9D4"
     )
-)
+  ),
+  
+  # Cabecera ----------------------------------------------------------------
+  
+  header = dashboardHeader(
+    title = div(
+      tags$i(
+        class = "fa-regular fa-seedling",
+        style = "color: #55862d;"
+      ),
+      "River Plate"
+    )
+  ),
+  
+  # Barra Izquierda ---------------------------------------------------------
+  
+  sidebar = dashboardSidebar(
+    includeCSS("www/styles.css"),
+    useShinyjs(),
+    useSweetAlert(),
+    useSever(),
+    tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico")),
+    use_googlefont("Quicksand"),
+    sidebarMenuOutput("menu")
+  ),
+  
+  # Cuerpo ------------------------------------------------------------------
+  
+  body = dashboardBody(
+      login_ui("login"),  
+    # CONTENIDO TABS--------------------
+      
+      # 2 - jugadores --------------------
+      
+      # * 1. Jugadores 1 --------------------------------------------------------
+    
+      tabItem(
+        tabName = "jugadores_1",
+        hidden(
+          div(
+            id = "jugadores_1_show",
+            jugadores_ui(id = "jugadores_1_mod")
+          )
+        )
+      ), # cierra el tab
+      
+      # * 2. Jugadores 2 --------------------------------------------------------
+      
+      tabItem(
+        tabName = "jugadores_2",
+        hidden(
+          div(
+            id = "jugadores_2_show",
+            jugadores_ui(id = "jugadores_2_mod")
+          )
+        )
+      )
+    
+    
+  )# cierra el body del dashboard
+)# cierra el dashboard page

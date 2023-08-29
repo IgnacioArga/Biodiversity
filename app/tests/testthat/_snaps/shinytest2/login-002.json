@@ -1,0 +1,31 @@
+{
+  "input": {
+    "jugadores_1_mod-delete": 0,
+    "jugadores_1_mod-editar": 0,
+    "jugadores_1_mod-nuevo": 0,
+    "jugadores_1_mod-tab": "Jugadores",
+    "jugadores_2_mod-delete": 0,
+    "jugadores_2_mod-editar": 0,
+    "jugadores_2_mod-nuevo": 0,
+    "jugadores_2_mod-tab": "Jugadores",
+    "login-login": 3,
+    "login-password": "asdf",
+    "login-user": "asdf",
+    "sidebarCollapsed": false,
+    "sidebarItemExpanded": null
+  },
+  "output": {
+    "login-modal_login": null,
+    "menu": {
+      "message": "",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
+  },
+  "export": {
+
+  }
+}
