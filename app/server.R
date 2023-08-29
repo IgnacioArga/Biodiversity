@@ -55,31 +55,24 @@ function(input, output, session) {
   output$menu <- renderMenu({
     req(login_result())
     
-    shinyjs::show("jugadores_1_show")
-    shinyjs::show("jugadores_2_show")
+    shinyjs::show("map_1_show")
     
     sidebarMenu(
       menuItem(
-        text = 'Jugadores', 
+        text = 'map', 
         icon = icon('users'),
-        menuSubItem(text = 'Jugadores 1', tabName = 'jugadores_1', icon = icon('users')),
-        menuSubItem(text = 'Jugadores 2', tabName = 'jugadores_2', icon = icon('users'))
+        menuSubItem(text = 'map 1', tabName = 'map_1', icon = icon('users'))
       )
     )
   })
   
-  # 2 - jugadores --------------------
+  # 1 - Map --------------------
   
-  # * 1. Jugadores 1 --------------------------------------------------------
+  # * 1. map 1 --------------------------------------------------------
   
-  jugadores_server(
-    id = "jugadores_1_mod"
-  )
-  
-  # * 2. Jugadores 2 --------------------------------------------------------
-  
-  jugadores_server(
-    id = "jugadores_2_mod"
+  map_server(
+    id            = "map_1_mod",
+    connection_bq = pool_bq
   )
   
   

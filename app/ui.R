@@ -67,28 +67,16 @@ dashboardPage(
       login_ui("login"),  
     # CONTENIDO TABS--------------------
       
-      # 2 - jugadores --------------------
+      # 2 - map --------------------
       
-      # * 1. Jugadores 1 --------------------------------------------------------
+      # * 1. map 1 --------------------------------------------------------
     
       tabItem(
-        tabName = "jugadores_1",
+        tabName = "map_1",
         hidden(
           div(
-            id = "jugadores_1_show",
-            jugadores_ui(id = "jugadores_1_mod")
-          )
-        )
-      ), # cierra el tab
-      
-      # * 2. Jugadores 2 --------------------------------------------------------
-      
-      tabItem(
-        tabName = "jugadores_2",
-        hidden(
-          div(
-            id = "jugadores_2_show",
-            jugadores_ui(id = "jugadores_2_mod")
+            id = "map_1_show",
+            map_ui(id = "map_1_mod")
           )
         )
       )

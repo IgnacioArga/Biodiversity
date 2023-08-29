@@ -1,13 +1,13 @@
 {
   "input": {
-    "jugadores_1_mod-delete": 0,
-    "jugadores_1_mod-editar": 0,
-    "jugadores_1_mod-nuevo": 0,
-    "jugadores_1_mod-tab": "Jugadores",
-    "jugadores_2_mod-delete": 0,
-    "jugadores_2_mod-editar": 0,
-    "jugadores_2_mod-nuevo": 0,
-    "jugadores_2_mod-tab": "Jugadores",
+    "map_1_mod-delete": 0,
+    "map_1_mod-editar": 0,
+    "map_1_mod-nuevo": 0,
+    "map_1_mod-tab": "map",
+    "map_2_mod-delete": 0,
+    "map_2_mod-editar": 0,
+    "map_2_mod-nuevo": 0,
+    "map_2_mod-tab": "map",
     "login-login": 4,
     "login-password": "testing",
     "login-user": "appsilon",
@@ -15,7 +15,7 @@
     "sidebarItemExpanded": null
   },
   "output": {
-    "jugadores_1_mod-tabla": {
+    "map_1_mod-tabla": {
       "x": {
         "style": "bootstrap",
         "filter": "top",
@@ -541,7 +541,7 @@
         }
       ]
     },
-    "jugadores_2_mod-tabla": {
+    "map_2_mod-tabla": {
       "x": {
         "style": "bootstrap",
         "filter": "top",
@@ -1069,7 +1069,7 @@
     },
     "login-modal_login": null,
     "menu": {
-      "html": "<ul class=\"sidebar-menu\">\n  <li class=\"treeview\">\n    <a href=\"#\">\n      <i class=\"fas fa-users\" role=\"presentation\" aria-label=\"users icon\"><\/i>\n      <span>Jugadores<\/span>\n      <i class=\"fas fa-angle-left pull-right\" role=\"presentation\" aria-label=\"angle-left icon\"><\/i>\n    <\/a>\n    <ul class=\"treeview-menu\" style=\"display: none;\" data-expanded=\"Jugadores\">\n      <li>\n        <a href=\"#shiny-tab-jugadores_1\" data-toggle=\"tab\" data-value=\"jugadores_1\">\n          <i class=\"fas fa-users\" role=\"presentation\" aria-label=\"users icon\"><\/i>\n          Jugadores 1\n        <\/a>\n      <\/li>\n      <li>\n        <a href=\"#shiny-tab-jugadores_2\" data-toggle=\"tab\" data-value=\"jugadores_2\">\n          <i class=\"fas fa-users\" role=\"presentation\" aria-label=\"users icon\"><\/i>\n          Jugadores 2\n        <\/a>\n      <\/li>\n    <\/ul>\n  <\/li>\n<\/ul>",
+      "html": "<ul class=\"sidebar-menu\">\n  <li class=\"treeview\">\n    <a href=\"#\">\n      <i class=\"fas fa-users\" role=\"presentation\" aria-label=\"users icon\"><\/i>\n      <span>map<\/span>\n      <i class=\"fas fa-angle-left pull-right\" role=\"presentation\" aria-label=\"angle-left icon\"><\/i>\n    <\/a>\n    <ul class=\"treeview-menu\" style=\"display: none;\" data-expanded=\"map\">\n      <li>\n        <a href=\"#shiny-tab-map_1\" data-toggle=\"tab\" data-value=\"map_1\">\n          <i class=\"fas fa-users\" role=\"presentation\" aria-label=\"users icon\"><\/i>\n          map 1\n        <\/a>\n      <\/li>\n      <li>\n        <a href=\"#shiny-tab-map_2\" data-toggle=\"tab\" data-value=\"map_2\">\n          <i class=\"fas fa-users\" role=\"presentation\" aria-label=\"users icon\"><\/i>\n          map 2\n        <\/a>\n      <\/li>\n    <\/ul>\n  <\/li>\n<\/ul>",
       "deps": [
         {
           "name": "font-awesome",
