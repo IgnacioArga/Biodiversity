@@ -5,28 +5,27 @@ steps:
   args: 
     - '-c'
     - |
-      docker pull gcr.io/"personal-cloud-397320"/biodiversity-testing:latest || exit 0
+      docker pull gcr.io/personal-cloud-397320/biodiversity:latest || exit 0
 - id: docker build
   name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
   args:
     - '-c'
     - |
-      docker build -t gcr.io/"personal-cloud-397320"/biodiversity-testing \
-      --cache-from gcr.io/"personal-cloud-397320"/biodiversity-testing:latest \
+      docker build -t gcr.io/personal-cloud-397320/biodiversity \
+      --cache-from gcr.io/personal-cloud-397320/biodiversity:latest \
       .
-  secretEnv: ['GITHUB_PAT', 'DATA_DB_COHEN_U', 'DATA_DB_COHEN_P', 'DATA_DB_INGE_U', 'DATA_DB_INGE_P', 'SERVICE_ACCOUNT_GCS']
 - id: docker push
   name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/"personal-cloud-397320"/biodiversity-testing']
+  args: ['push', 'gcr.io/personal-cloud-397320/biodiversity']
 - id: deploy to cloud run
   name: 'gcr.io/cloud-builders/gcloud'
   args:
   - run
   - deploy
-  - biodiversity-testing 
+  - biodiversity 
   - --image
-  - gcr.io/"personal-cloud-397320"/biodiversity-testing
+  - gcr.io/personal-cloud-397320/biodiversity
   - --region
   - us-central1
   - --platform
@@ -35,12 +34,9 @@ steps:
   - 1Gi
   - --cpu
   - '1'
-  - --vpc-connector
-  - --vpc-egress
-  - 'private-ranges-only'
   - --allow-unauthenticated
 
 images:
-- gcr.io/"personal-cloud-397320"/biodiversity-testing
+- gcr.io/personal-cloud-397320/biodiversity
 
 timeout: 14400s
