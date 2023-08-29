@@ -2,7 +2,7 @@
 
 dashboardPage(
   skin = "black",
-  title = "Cohen - Comercial",
+  title = "Biodiversity",
   freshTheme = create_theme(
     adminlte_global(
       content_bg  = "#fcfcfc",

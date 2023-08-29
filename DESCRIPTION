@@ -5,6 +5,7 @@ Description: What the package does (one paragraph).
 Imports: 
     bigrquery,
     config,
+    dplyr,
     DT,
     leaflet,
     pool,
