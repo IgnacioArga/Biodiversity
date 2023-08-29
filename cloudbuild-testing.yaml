@@ -34,7 +34,6 @@ steps:
   - 1Gi
   - --cpu
   - '1'
-  - --vpc-connector
   - --vpc-egress
   - 'private-ranges-only'
   - --allow-unauthenticated

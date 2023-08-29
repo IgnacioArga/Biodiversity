@@ -3,13 +3,12 @@ FROM rocker/shiny:4.0.5
 # --- Se instalan las librerias propias de Ubuntu --- #
 
 RUN apt-get update && apt-get install -y \
-    libmariadbclient-dev \
     libssl-dev \
     libsodium-dev \
     curl \
     gnupg
 
-RUN apt-get install -y libgdal-dev default-libmysqlclient-dev libmysqlclient-dev
+RUN apt-get install -y libgdal-dev 
 
 # --- Configuracion Shiny --- #
 
@@ -27,7 +26,7 @@ COPY renv.lock renv.lock
 
 # --- Actualizo librerias --- #
 
-RUN R -e 'renv::activate();renv::consent(provided = TRUE);renv::restore()'
+#RUN R -e 'renv::activate();renv::consent(provided = TRUE);renv::restore()'
 
 # --- Copia aplicacion --- #
 
