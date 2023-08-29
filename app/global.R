@@ -27,8 +27,7 @@ purrr::walk(
     library(
       package        = x,
       character.only = TRUE,
-      warn.conflicts = !quietly,
-      quietly        = quietly
+      verbose        = FALSE
     )
   }
 )
@@ -53,3 +52,4 @@ pool_bq <- pool::dbPool(
 
 # 4 - Modules -------------------------------------------------------------
 
+invisible(lapply(list.files(path = "modules", full.names = TRUE), source))

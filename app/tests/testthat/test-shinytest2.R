@@ -1,0 +1,18 @@
+library(shinytest2)
+
+test_that("{shinytest2} recording: login", {
+  app <- AppDriver$new(name = "login", height = 1070, width = 1832)
+  app$click("login-login")
+  app$set_inputs(`login-password` = "")
+  app$set_inputs(`login-user` = "")
+  app$click("login-login")
+  app$expect_values()
+  app$set_inputs(`login-user` = "asdf")
+  app$set_inputs(`login-password` = "asdf")
+  app$click("login-login")
+  app$expect_values()
+  app$set_inputs(`login-user` = "appsilon")
+  app$set_inputs(`login-password` = "testing")
+  app$click("login-login")
+  app$expect_values()
+})

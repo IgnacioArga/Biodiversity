@@ -13,6 +13,7 @@ Imports:
     shinydashboardPlus,
     shinyFeedback,
     shinyjs,
+    shinytest2,
     shinyWidgets,
     usethis
 Encoding: UTF-8
