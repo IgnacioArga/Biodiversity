@@ -26,7 +26,7 @@ COPY renv.lock renv.lock
 
 # --- Actualizo librerias --- #
 
-#RUN R -e 'renv::activate();renv::consent(provided = TRUE);renv::restore()'
+RUN R -e 'renv::activate();renv::consent(provided = TRUE);renv::restore()'
 
 # --- Copia aplicacion --- #
 
