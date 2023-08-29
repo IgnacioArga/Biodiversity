@@ -32,4 +32,3 @@ RUN R -e 'renv::activate();renv::consent(provided = TRUE);renv::restore()'
 # --- Copia aplicacion --- #
 
 COPY --chown=shiny:shiny app/ /srv/shiny-server/
-COPY --chown=shiny:shiny NEWS.md /srv/shiny-server/www/
