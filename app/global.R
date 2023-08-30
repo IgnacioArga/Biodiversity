@@ -17,6 +17,7 @@ libraries <- list(
   "Shiny Core"   = list("shiny", "shinydashboard"),
   "Shiny Extras" = list("shinyjs", "shinyWidgets", "shinydashboardPlus", "sever", "fresh"),
   "Tables"       = list("DT"),
+  "Plot"         = list("leaflet"),
   "DDBB"         = list("pool", "bigrquery"),
   "Tidyverse"    = list("tibble", "dplyr")
 )

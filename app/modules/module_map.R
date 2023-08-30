@@ -41,8 +41,8 @@ map_ui <- function(id) {
           leafletOutput(outputId = ns("map"), height = "80vh")
         ),
         tabPanel(
-          title =  "Detail",
-          DT::DTOutput(outputId = ns("tabla"))
+          title =  "Table",
+          DT::DTOutput(outputId = ns("table"))
         )
       )
     )
@@ -67,36 +67,18 @@ map_server <- function(id,
       # 0 - Factors -------------------------------------------------------------
       
       factors <- reactive({
-        start <- Sys.time()
-        scientificName <- DBI::dbGetQuery(
+        factors <- DBI::dbGetQuery(
           conn = connection_bq,
           glue::glue(
-            "SELECT DISTINCT scientificName
+            "SELECT DISTINCT scientificName, vernacularName, country
             FROM `personal-cloud-397320.Biodiversity.Occurrence`;"
           )
         )
         
-        vernacularName <- DBI::dbGetQuery(
-          conn = connection_bq,
-          glue::glue(
-            "SELECT DISTINCT vernacularName
-            FROM `personal-cloud-397320.Biodiversity.Occurrence`;"
-          )
-        )
-        
-        country <- DBI::dbGetQuery(
-          conn = connection_bq,
-          glue::glue(
-            "SELECT DISTINCT country
-            FROM `personal-cloud-397320.Biodiversity.Occurrence`;"
-          )
-        )
-        end <- Sys.time()
-        difftime(end,start)
         list(
-          scientificName = scientificName,
-          vernacularName = vernacularName,
-          country        = country
+          scientificName = unique(factors$scientificName),
+          vernacularName = unique(factors$vernacularName),
+          country        = unique(factors$country)
         )
         
       })
@@ -105,24 +87,80 @@ map_server <- function(id,
       
       data <- reactive({
         
+        progressSweetAlert(
+          session     = session,
+          id          = "progress_data",
+          title       = tagList("Looking for species...", loadingState()),
+          display_pct = TRUE,
+          value       = 0,
+          striped     = TRUE,
+          status      = "primary"
+        )
+        
         data <- DBI::dbGetQuery(
           conn = connection_bq,
           glue::glue(
-            "SELECT scientificName, vernacularName, longitudeDecimal, latitudeDecimal, count(1) AS Amount
+            "SELECT 
+              country, 
+              scientificName, 
+              vernacularName, 
+              longitudeDecimal, 
+              latitudeDecimal, 
+              count(1) AS Amount
             FROM `personal-cloud-397320.Biodiversity.Occurrence`
-            WHERE country = '{country}' AND vernacularName = '{specie}'
-            GROUP BY scientificName, vernacularName, longitudeDecimal, latitudeDecimal;",
-            specie  = factors()$vernacularName,
-            country = factors()$country
+            WHERE 
+              country = '{country}' AND 
+              vernacularName = '{specie}'
+            GROUP BY 
+              country, 
+              scientificName, 
+              vernacularName, 
+              longitudeDecimal, 
+              latitudeDecimal;",
+            specie  = factors()$vernacularName[[1]][1],
+            country = factors()$country[[1]][1]
           )
         )
+        
+        updateProgressBar(
+          session = session,
+          id      = "progress_data",
+          value   = 100,
+          status  = "success"
+        )
+        
+        Sys.sleep(0.5)
+        closeSweetAlert(session = session)
         
         return(data)
         
       })
-      # 3 - Genero tabla --------------------------------------------------------
       
-      output$tabla <- DT::renderDT({
+
+      # 2 - Map -----------------------------------------------------------------
+
+      output$map <- renderLeaflet({
+        leaflet() %>%
+          addProviderTiles(providers$CartoDB.Positron) %>%
+          addCircleMarkers(
+            data           = data(),
+            lng            = ~longitudeDecimal,
+            lat            = ~latitudeDecimal,
+            clusterOptions = data()
+          ) %>%
+          addMeasure(
+            position          = "bottomleft",
+            primaryLengthUnit = "meters",
+            primaryAreaUnit   = "sqmeters",
+            activeColor       = "#3D535D",
+            completedColor    = "#7D4479"
+          )
+      })
+      
+      
+      # 3 - Table ---------------------------------------------------------------
+      
+      output$table <- DT::renderDT({
         shiny::validate(
           shiny::need(
             !rlang::is_null(data()) && nrow(data()) > 0,

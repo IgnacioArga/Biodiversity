@@ -4,16 +4,13 @@ Version: 1.0.1
 Description: What the package does (one paragraph).
 Imports: 
     bigrquery,
-    config,
-    DT,
+    dplyr,
     leaflet,
-    pool,
-    rpivotTable,
     sever,
+    shiny,
+    shinydashboard,
     shinydashboardPlus,
-    shinyFeedback,
     shinyjs,
-    shinytest2,
     shinyWidgets,
     usethis
 Encoding: UTF-8
