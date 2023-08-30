@@ -29,7 +29,7 @@ RUN ["/bin/bash", "-c", "source ~/.bashrc "]
 
 # --- Configuracion Shiny --- #
 
-COPY shiny-customized.config /etc/shiny-server/shiny-server.conf
+#COPY shiny-customized.config /etc/shiny-server/shiny-server.conf
 
 # --- Instalo renv y copio lock.file --- #
 
