@@ -2,37 +2,22 @@
 
 renv::consent(provided = TRUE); renv::restore();
 
-config <- config::get(
-  file = ifelse(
-    file.exists("config"),
-    "config.yml",
-    "app/config.yml"
-  )
-)
-
 # 2 - Libraries ------------------------------------------------------------
 
-libraries <- list(
-  "Reproduccion" = list("renv", "config"),
-  "Shiny Core"   = list("shiny", "shinydashboard"),
-  "Shiny Extras" = list("shinyjs", "shinyWidgets", "shinydashboardPlus", "sever", "fresh"),
-  "Tables"       = list("DT"),
-  "DDBB"         = list("pool", "bigrquery"),
-  "Tidyverse"    = list("tibble", "dplyr")
-)
-
-purrr::walk(
-  .x = c(libraries, recursive = TRUE, use.names = FALSE),
-  .f = function(x) {
-    library(
-      package        = x,
-      character.only = TRUE,
-      verbose        = FALSE
-    )
-  }
-)
-
-rm("libraries")
+library(renv)
+library(shiny)
+library(shinydashboard)
+library(shinyjs)
+library(shinyWidgets)
+library(shinydashboardPlus)
+library(sever)
+library(fresh)
+library(leaflet)
+library(DT)
+library(pool)
+library(bigrquery)
+library(tibble)
+library(dplyr)
 
 # 3 - Connections ---------------------------------------------------------
 
@@ -46,7 +31,7 @@ bigrquery::bq_auth(
 
 pool_bq <- pool::dbPool(
   drv = bigrquery::bigquery(),
-  project = config$bigquery$project,
+  project = "personal-cloud-397320",
   bigint = "integer"
 )
 
