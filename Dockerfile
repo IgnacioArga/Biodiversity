@@ -29,9 +29,11 @@ RUN ["/bin/bash", "-c", "source ~/.bashrc "]
 
 # --- Configuracion Shiny --- #
 
-#COPY shiny-customized.config /etc/shiny-server/shiny-server.conf
+COPY shiny-customized.config /etc/shiny-server/shiny-server.conf
 
 # --- Instalo renv y copio lock.file --- #
+
+USER shiny
 
 RUN rm -rf /srv/*
 
@@ -48,4 +50,3 @@ RUN R -e 'renv::activate();renv::consent(provided = TRUE);renv::restore()'
 # --- Copia aplicacion --- #
 
 COPY --chown=shiny:shiny app/ /srv/shiny-server/
-RUN chown -R shiny:shiny /srv/shiny-server/renv/library
