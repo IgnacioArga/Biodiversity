@@ -62,6 +62,20 @@ function(input, output, session) {
         text = 'map', 
         icon = icon('users'),
         menuSubItem(text = 'map 1', tabName = 'map_1', icon = icon('users'))
+      ),
+      div(
+        actionBttn(
+          inputId = 'data_source',
+          label   = a(
+            href   = 'https://www.gbif.org/',
+            target = '_blank',
+            HTML("<i class='fa fa-database' role='presentation' aria-label='database icon'></i> Data Source")
+          ),
+          style = 'bordered',
+          size  = 'xs',
+          block = TRUE
+        ),
+        align = 'center'
       )
     )
   })

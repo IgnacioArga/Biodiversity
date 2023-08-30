@@ -2,23 +2,23 @@
 
 dashboardPage(
   skin = "black",
-  title = "Cohen - Comercial",
+  title = "GBIF Report",
   freshTheme = create_theme(
     adminlte_global(
-      content_bg  = "#fcfcfc",
-      box_bg      = "#ffffff",
-      info_box_bg = "#ffffff"
+      content_bg  = "#fcfcfc !important",
+      box_bg      = "#ffffff !important",
+      info_box_bg = "#ffffff !important"
     ),
     adminlte_sidebar(
-      dark_bg                  = "#af2613f7",  # Rojo predominante
-      dark_hover_bg            = "#8F271C",  # Rojo más oscuro para el hover
+      dark_bg                  = "#396c3b",  # Verde predominante
+      dark_hover_bg            = "#2b5230",  # Verde más oscuro para el hover
       dark_color               = "#d6d2d9",
-      dark_submenu_bg          = "#000000",  # Rojo oscuro para los submenús
+      dark_submenu_bg          = "#000000",  # Verde oscuro para los submenús
       dark_submenu_color       = "#b2b2b2",
       dark_submenu_hover_color = "#ffffff"
     ),
     adminlte_color(
-      light_blue = "#00529F",  
+      light_blue = "#31749B",
       red        = "#D13823",
       green      = "#008F4F",
       aqua       = "#00A3CC",
@@ -42,10 +42,10 @@ dashboardPage(
   header = dashboardHeader(
     title = div(
       tags$i(
-        class = "fa-regular fa-seedling",
+        class = "fa-solid fa-seedling",
         style = "color: #55862d;"
       ),
-      "River Plate"
+      "GBIF Report"
     )
   ),
   
@@ -64,23 +64,21 @@ dashboardPage(
   # Cuerpo ------------------------------------------------------------------
   
   body = dashboardBody(
-      login_ui("login"),  
-    # CONTENIDO TABS--------------------
-      
-      # 2 - map --------------------
-      
-      # * 1. map 1 --------------------------------------------------------
+    login_ui("login"),  
+    # CONTENIDO TABS --------------------
     
-      tabItem(
-        tabName = "map_1",
-        hidden(
-          div(
-            id = "map_1_show",
-            map_ui(id = "map_1_mod")
-          )
+    # 2 - map -----------------------------------------------------------
+    
+    # * 1. map 1 --------------------------------------------------------
+    
+    tabItem(
+      tabName = "map_1",
+      hidden(
+        div(
+          id = "map_1_show",
+          map_ui(id = "map_1_mod")
         )
       )
-    
-    
+    )
   )# cierra el body del dashboard
 )# cierra el dashboard page
