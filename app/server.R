@@ -72,7 +72,8 @@ function(input, output, session) {
   
   map_server(
     id            = "map_1_mod",
-    connection_bq = pool_bq
+    connection_bq = pool_bq,
+    login_result  = login_result
   )
   
   

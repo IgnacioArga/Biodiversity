@@ -21,15 +21,31 @@ map_ui <- function(id) {
         collapsible = FALSE,
         collapsed   = FALSE,
         selectizeInput(
-          inputId =  ns("specie"),
-          label   = "Specie:",
-          choices = NULL
-        ) %>%
-          shiny::tagAppendAttributes(style = 'width: 100%;'),
-        selectizeInput(
           inputId =  ns("country"),
           label   = "Country:",
           choices = NULL
+        ) %>%
+          shiny::tagAppendAttributes(style = 'width: 100%;'),
+        hr(),
+        radioGroupButtons(
+          inputId = ns("specie_name"),
+          label = "Specie:",
+          choices = c("Scientific Name", "Vernacular Name"),
+          checkIcon = list(
+            yes = tags$i(
+              class = "fa fa-check-square", 
+              style = "color: steelblue"
+            ),
+            no = tags$i(
+              class = "fa fa-square-o", 
+              style = "color: steelblue"
+            )
+          )
+        ),
+        selectizeInput(
+          inputId  =  ns("specie"),
+          label    = NULL,
+          choices  = NULL
         ) %>%
           shiny::tagAppendAttributes(style = 'width: 100%;')
       ),
@@ -53,54 +69,197 @@ map_ui <- function(id) {
 #'
 #' @param id
 #' @param connection_bq S4. BigQuery connection
+#' @param login_result S4. BigQuery connection
 #'
 #' @return modulo pendencias serverside
 map_server <- function(id,
-                       connection_bq) {
+                       connection_bq,
+                       login_result) {
   
   moduleServer(
     id = id,
     module = function(input, output, session) {
       ns <- session$ns
       
+      # 0 - Setup ---------------------------------------------------------------
       
-      # 0 - Factors -------------------------------------------------------------
-      
-      factors <- reactive({
-        factors <- DBI::dbGetQuery(
-          conn = connection_bq,
-          glue::glue(
-            "SELECT DISTINCT scientificName, vernacularName, country
-            FROM `personal-cloud-397320.Biodiversity.Occurrence`;"
-          )
-        )
-        
-        list(
-          scientificName = unique(factors$scientificName),
-          vernacularName = unique(factors$vernacularName),
-          country        = unique(factors$country)
-        )
-        
-      })
-      
-      # 1 - Obtengo la data -----------------------------------------------------
-      
-      data <- reactive({
+      # * 1. Countries ----------------------------------------------------------
+
+      countries <- reactive({
+        req(login_result())
+        timestamp("countries")
         
         progressSweetAlert(
           session     = session,
-          id          = "progress_data",
-          title       = tagList("Looking for species...", loadingState()),
+          id          = "progress_update_country",
+          title       = tagList("Looking for countries...", loadingState()),
           display_pct = TRUE,
           value       = 0,
           striped     = TRUE,
           status      = "primary"
         )
+        countries <- DBI::dbGetQuery(
+          conn = connection_bq,
+          "SELECT DISTINCT country
+          FROM `personal-cloud-397320.Biodiversity.Occurrence`;"
+        )
+        updateSelectizeInput(
+          session  = session,
+          inputId  = "country",
+          choices  = countries$country,
+          selected = "Poland",
+          options  = list(
+            placeholder  = "Select Country...",
+            onInitialize = I('function() { this.setValue(""); }'),
+            maxItems     = 1,
+            highlight    = FALSE
+          ),
+          server = TRUE
+        )
+        updateProgressBar(
+          session = session,
+          id      = "progress_update_country",
+          value   = 100,
+          status  = "success"
+        )
         
-        data <- DBI::dbGetQuery(
+        Sys.sleep(0.5)
+        closeSweetAlert(session = session)
+        
+        return(countries)
+      })
+
+      # * 2. Species ------------------------------------------------------------
+      
+      factors <- eventReactive(input$country, {
+        req(login_result())
+        timestamp("factors")
+        
+        factors <- DBI::dbGetQuery(
           conn = connection_bq,
           glue::glue(
-            "SELECT 
+            "SELECT DISTINCT scientificName, vernacularName
+            FROM `personal-cloud-397320.Biodiversity.Occurrence`
+            WHERE country = '{country}';",
+            country = input$country
+          )
+        )
+        
+        list(
+          scientificName = unique(factors$scientificName),
+          vernacularName = unique(factors$vernacularName)
+        )
+      })
+      
+      
+      observeEvent(
+        list(
+          input$specie_name, 
+          factors()
+        ), {
+          req(login_result(), factors())
+          timestamp("input$specie_name, countries()")
+          
+          
+          progressSweetAlert(
+            session     = session,
+            id          = "progress_update_specie",
+            title       = tagList("Looking for species...", loadingState()),
+            display_pct = TRUE,
+            value       = 0,
+            striped     = TRUE,
+            status      = "primary"
+          )
+          
+          if (input$specie_name == "Scientific Name") {
+            updateSelectizeInput(
+              session  = session,
+              inputId  = "specie",
+              choices  = factors()$scientificName,
+              selected = character(0),
+              options  = list(
+                placeholder  = "Select Specie...",
+                onInitialize = I('function() { this.setValue(""); }'),
+                maxItems     = 1,
+                highlight    = FALSE
+              ),
+              server = TRUE
+            )
+          } else {
+            updateSelectizeInput(
+              session  = session,
+              inputId  = "specie",
+              choices  = factors()$vernacularName,
+              selected = character(0),
+              options  = list(
+                placeholder  = "Select Specie...",
+                onInitialize = I('function() { this.setValue(""); }'),
+                highlight    = FALSE
+              ),
+              server = TRUE
+            )
+          }
+          
+          updateProgressBar(
+            session = session,
+            id      = "progress_update_specie",
+            value   = 100,
+            status  = "success"
+          )
+          
+          Sys.sleep(0.5)
+          closeSweetAlert(session = session)
+          
+        }, ignoreInit = FALSE)
+      
+      
+      # 1 - Obtengo la data -----------------------------------------------------
+      
+      data <- eventReactive(
+        list(
+          countries(),
+          input$country
+        ), {
+          req(login_result(), input$country)
+          timestamp("data")
+          progressSweetAlert(
+            session     = session,
+            id          = "progress_data",
+            title       = tagList("Loading Map...", loadingState()),
+            display_pct = TRUE,
+            value       = 0,
+            striped     = TRUE,
+            status      = "primary"
+          )
+          
+          # specie <- if (input$specie_name == "Vernacular Name") {
+          #   if (rlang::is_null(input$specie) || input$specie == "") {
+          #     ""
+          #   } else {  
+          #     glue::glue_collapse(
+          #       glue::glue(
+          #         " AND vernacularName IN ('{specie}')", 
+          #         specie = glue::glue_collapse(input$specie, sep = "', '")
+          #       )
+          #     )
+          #   }
+          # } else {
+          #   if (rlang::is_null(input$specie) || input$specie == "") {
+          #     ""
+          #   } else {  
+          #     glue::glue_collapse(
+          #       glue::glue(
+          #         " AND scientificName IN ('{specie}')", 
+          #         specie = glue::glue_collapse(input$specie, sep = "', '")
+          #       )
+          #     )
+          #   }
+          # }
+          
+          data <- DBI::dbGetQuery(
+            conn = connection_bq,
+            glue::glue(
+              "SELECT 
               country, 
               scientificName, 
               vernacularName, 
@@ -109,44 +268,62 @@ map_server <- function(id,
               count(1) AS Amount
             FROM `personal-cloud-397320.Biodiversity.Occurrence`
             WHERE 
-              country = '{country}' AND 
-              vernacularName = '{specie}'
+              country = '{country}'
             GROUP BY 
               country, 
               scientificName, 
               vernacularName, 
               longitudeDecimal, 
               latitudeDecimal;",
-            specie  = factors()$vernacularName[[1]][1],
-            country = factors()$country[[1]][1]
+            country = input$country
+            )
           )
-        )
-        
-        updateProgressBar(
-          session = session,
-          id      = "progress_data",
-          value   = 100,
-          status  = "success"
-        )
-        
-        Sys.sleep(0.5)
-        closeSweetAlert(session = session)
-        
-        return(data)
-        
-      })
+          
+          updateProgressBar(
+            session = session,
+            id      = "progress_data",
+            value   = 100,
+            status  = "success"
+          )
+          
+          Sys.sleep(0.5)
+          closeSweetAlert(session = session)
+          
+          return(data)
+          
+        })
+      
+      filtered_data <- eventReactive(
+        list(
+          data(),
+          input$specie
+        ), {
+          
+          if (rlang::is_null(input$specie) || input$specie == "") {
+            data()
+          } else if (input$specie_name == "Vernacular Name") {
+            data() %>%
+              filter(vernacularName == input$specie)
+          } else {
+            data() %>%
+              filter(scientificName == input$specie)
+          }
+          
+          
+        })
       
 
       # 2 - Map -----------------------------------------------------------------
 
       output$map <- renderLeaflet({
+        timestamp("map")
         leaflet() %>%
           addProviderTiles(providers$CartoDB.Positron) %>%
           addCircleMarkers(
-            data           = data(),
+            data           = filtered_data(),
             lng            = ~longitudeDecimal,
             lat            = ~latitudeDecimal,
-            clusterOptions = data()
+            clusterOptions = filtered_data()
           ) %>%
           addMeasure(
             position          = "bottomleft",
@@ -161,15 +338,16 @@ map_server <- function(id,
       # 3 - Table ---------------------------------------------------------------
       
       output$table <- DT::renderDT({
+        timestamp("table")
         shiny::validate(
           shiny::need(
-            !rlang::is_null(data()) && nrow(data()) > 0,
+            !rlang::is_null(filtered_data()) && nrow(filtered_data()) > 0,
             'No existen datos...'
           )
         )
         
         DT::datatable(
-          data(),
+          filtered_data(),
           selection = "single",
           rownames = FALSE,
           filter = 'top',
@@ -180,9 +358,12 @@ map_server <- function(id,
             pageLength = 20
           )
         )
-      }, server = FALSE)
-      
-      # 5 - Refresh -------------------------------------------------------------
+      }, server = TRUE)
+
+      # 5 - Input Validator -----------------------------------------------------
+
+      iv <- InputValidator$new()
+      iv$add_rule("country", sv_required(message = "You must select a country"))
       
     }
   )
