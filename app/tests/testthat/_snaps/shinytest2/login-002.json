@@ -1,0 +1,31 @@
+{
+  "input": {
+    "map_1_mod-delete": 0,
+    "map_1_mod-editar": 0,
+    "map_1_mod-nuevo": 0,
+    "map_1_mod-tab": "map",
+    "map_2_mod-delete": 0,
+    "map_2_mod-editar": 0,
+    "map_2_mod-nuevo": 0,
+    "map_2_mod-tab": "map",
+    "login-login": 3,
+    "login-password": "asdf",
+    "login-user": "asdf",
+    "sidebarCollapsed": false,
+    "sidebarItemExpanded": null
+  },
+  "output": {
+    "login-modal_login": null,
+    "menu": {
+      "message": "",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
+  },
+  "export": {
+
+  }
+}

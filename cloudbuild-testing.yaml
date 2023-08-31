@@ -1,0 +1,42 @@
+steps:
+- id: docker pull
+  name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args: 
+    - '-c'
+    - |
+      docker pull gcr.io/personal-cloud-397320/biodiversity-testing:latest || exit 0
+- id: docker build
+  name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      docker build -t gcr.io/personal-cloud-397320/biodiversity-testing \
+      --cache-from gcr.io/personal-cloud-397320/biodiversity-testing:latest \
+      .
+- id: docker push
+  name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/personal-cloud-397320/biodiversity-testing']
+- id: deploy to cloud run
+  name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - run
+  - deploy
+  - biodiversity-testing 
+  - --image
+  - gcr.io/personal-cloud-397320/biodiversity-testing
+  - --region
+  - us-central1
+  - --platform
+  - managed
+  - --memory
+  - 1Gi
+  - --cpu
+  - '1'
+  - --allow-unauthenticated
+
+images:
+- gcr.io/personal-cloud-397320/biodiversity-testing
+
+timeout: 14400s
