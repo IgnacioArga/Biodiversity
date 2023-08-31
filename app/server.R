@@ -131,7 +131,8 @@ function(input, output, session) {
 
   countries <- reactive({
     req(login_result())
-    timestamp("countries")
+    
+    iv$enable()
     
     progressSweetAlert(
       session     = session,
@@ -184,6 +185,12 @@ function(input, output, session) {
     countries     = countries,
     input_country = reactive(input$country)
   )
+  
+  
+  # 5 - Input Validator -----------------------------------------------------
+  
+  iv <- InputValidator$new()
+  iv$add_rule("country", sv_required(message = "You must select a country"))
   
   
 }

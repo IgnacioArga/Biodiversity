@@ -112,8 +112,6 @@ map_server <- function(id,
           factors()
         ), {
           req(login_result(), factors())
-          timestamp("input$specie_name, countries()")
-          
           
           progressSweetAlert(
             session     = session,
@@ -175,7 +173,7 @@ map_server <- function(id,
           input_country()
         ), {
           req(login_result(), input_country())
-          timestamp("data")
+          
           progressSweetAlert(
             session     = session,
             id          = "progress_data",
@@ -246,7 +244,7 @@ map_server <- function(id,
       # 2 - Map -----------------------------------------------------------------
 
       output$map <- renderLeaflet({
-        timestamp("map")
+        
         leaflet() %>%
           addProviderTiles(providers$CartoDB.Positron) %>%
           addCircleMarkers(
@@ -268,7 +266,7 @@ map_server <- function(id,
       # 3 - Table ---------------------------------------------------------------
       
       output$table <- DT::renderDT({
-        timestamp("table")
+        
         shiny::validate(
           shiny::need(
             !rlang::is_null(filtered_data()) && nrow(filtered_data()) > 0,
@@ -277,7 +275,13 @@ map_server <- function(id,
         )
         
         DT::datatable(
-          filtered_data(),
+          filtered_data() %>% 
+            mutate(
+              across(
+                .cols = c(country, scientificName, vernacularName),
+                .fns  = factor
+              )
+            ),
           selection = "single",
           rownames = FALSE,
           filter = 'top',
@@ -314,18 +318,11 @@ map_server <- function(id,
         
         valueBox(
           value = format(data_box, big.mark = ","),
-          subtitle = "Total Occurrence",
+          subtitle = "Total Occurrences",
           icon = icon("eye"),
           color = "green"
         )
       })
-      
-
-      # 5 - Input Validator -----------------------------------------------------
-
-      iv <- InputValidator$new()
-      iv$add_rule("country", sv_required(message = "You must select a country"))
-      
     }
   )
 }
