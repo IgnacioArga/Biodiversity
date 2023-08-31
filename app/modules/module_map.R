@@ -14,19 +14,12 @@ map_ui <- function(id) {
   tagList(
     fluidRow(
       box(
-        title       = HTML("Chooce Specie and Country"),
+        title       = HTML("Filter Parameters"),
         status      = "danger",
-        width       = 4,
+        width       = 3,
         solidHeader = FALSE,
         collapsible = FALSE,
         collapsed   = FALSE,
-        selectizeInput(
-          inputId =  ns("country"),
-          label   = "Country:",
-          choices = NULL
-        ) %>%
-          shiny::tagAppendAttributes(style = 'width: 100%;'),
-        hr(),
         radioGroupButtons(
           inputId = ns("specie_name"),
           label = "Specie:",
@@ -51,7 +44,7 @@ map_ui <- function(id) {
       ),
       tabBox(
         title = NULL,
-        width = 8,
+        width = 9,
         tabPanel(
           title =  "Map",
           leafletOutput(outputId = ns("map"), height = "80vh")
@@ -74,7 +67,9 @@ map_ui <- function(id) {
 #' @return modulo pendencias serverside
 map_server <- function(id,
                        connection_bq,
-                       login_result) {
+                       login_result,
+                       countries,
+                       input_country) {
   
   moduleServer(
     id = id,
@@ -83,55 +78,9 @@ map_server <- function(id,
       
       # 0 - Setup ---------------------------------------------------------------
       
-      # * 1. Countries ----------------------------------------------------------
-
-      countries <- reactive({
-        req(login_result())
-        timestamp("countries")
-        
-        progressSweetAlert(
-          session     = session,
-          id          = "progress_update_country",
-          title       = tagList("Looking for countries...", loadingState()),
-          display_pct = TRUE,
-          value       = 0,
-          striped     = TRUE,
-          status      = "primary"
-        )
-        countries <- DBI::dbGetQuery(
-          conn = connection_bq,
-          "SELECT DISTINCT country
-          FROM `personal-cloud-397320.Biodiversity.Occurrence`;"
-        )
-        updateSelectizeInput(
-          session  = session,
-          inputId  = "country",
-          choices  = countries$country,
-          selected = "Poland",
-          options  = list(
-            placeholder  = "Select Country...",
-            onInitialize = I('function() { this.setValue(""); }'),
-            maxItems     = 1,
-            highlight    = FALSE
-          ),
-          server = TRUE
-        )
-        updateProgressBar(
-          session = session,
-          id      = "progress_update_country",
-          value   = 100,
-          status  = "success"
-        )
-        
-        Sys.sleep(0.5)
-        closeSweetAlert(session = session)
-        
-        return(countries)
-      })
-
       # * 2. Species ------------------------------------------------------------
       
-      factors <- eventReactive(input$country, {
+      factors <- eventReactive(input_country(), {
         req(login_result())
         timestamp("factors")
         
@@ -141,7 +90,7 @@ map_server <- function(id,
             "SELECT DISTINCT scientificName, vernacularName
             FROM `personal-cloud-397320.Biodiversity.Occurrence`
             WHERE country = '{country}';",
-            country = input$country
+            country = input_country()
           )
         )
         
@@ -218,9 +167,9 @@ map_server <- function(id,
       data <- eventReactive(
         list(
           countries(),
-          input$country
+          input_country()
         ), {
-          req(login_result(), input$country)
+          req(login_result(), input_country())
           timestamp("data")
           progressSweetAlert(
             session     = session,
@@ -231,30 +180,6 @@ map_server <- function(id,
             striped     = TRUE,
             status      = "primary"
           )
-          
-          # specie <- if (input$specie_name == "Vernacular Name") {
-          #   if (rlang::is_null(input$specie) || input$specie == "") {
-          #     ""
-          #   } else {  
-          #     glue::glue_collapse(
-          #       glue::glue(
-          #         " AND vernacularName IN ('{specie}')", 
-          #         specie = glue::glue_collapse(input$specie, sep = "', '")
-          #       )
-          #     )
-          #   }
-          # } else {
-          #   if (rlang::is_null(input$specie) || input$specie == "") {
-          #     ""
-          #   } else {  
-          #     glue::glue_collapse(
-          #       glue::glue(
-          #         " AND scientificName IN ('{specie}')", 
-          #         specie = glue::glue_collapse(input$specie, sep = "', '")
-          #       )
-          #     )
-          #   }
-          # }
           
           data <- DBI::dbGetQuery(
             conn = connection_bq,
@@ -275,7 +200,7 @@ map_server <- function(id,
               vernacularName, 
               longitudeDecimal, 
               latitudeDecimal;",
-            country = input$country
+            country = input_country()
             )
           )
           

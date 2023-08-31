@@ -27,16 +27,21 @@ function(input, output, session) {
     shinyjs::runjs(
       'let h1Element = document.createElement("h1");
       let h3Element = document.createElement("h3");
+      let divElement = document.createElement("div");
+      
       let dialog = document.querySelector("#shiny-modal");
       
       h1Element.textContent = "Welcome to the Global Biodiversity Information Facility report ";
-      h3Element.innerHTML = "Follow me in  <a target=\\”_blank\\” href=\\"https://www.linkedin.com/in/ignacio-arganaraz-arriazu/?locale=en_US\\"> <i class=\\"fa-brands fa-linkedin\\"></i></a> <a target=\\”_blank\\” href=\\"https://github.com/IgnacioArga\\"> <i class=\\"fa-brands fa-github\\"></i></a>";
+      h3Element.innerHTML = "Follow me on  <a target=\\”_blank\\” href=\\"https://www.linkedin.com/in/ignacio-arganaraz-arriazu/?locale=en_US\\"> <i class=\\"fa-brands fa-linkedin\\"></i></a> <a target=\\”_blank\\” href=\\"https://github.com/IgnacioArga\\"> <i class=\\"fa-brands fa-github\\"></i></a>";
+      divElement.innerHTML = "Mountain bluebird [<i>Sialia currucoides</i> (Bechstein, 1798)] in 1962 at Gardner Lake, Wyoming, USA by Donald L. Pattie. Via the Philip L. Wright Zoological Museum."; 
       
       h1Element.style.textAlign = "center";
       h3Element.style.textAlign = "center";
+      divElement.classList.add("img_caption");
       
       dialog.insertBefore(h1Element, dialog.firstChild);
-      dialog.insertBefore(h3Element, dialog.firstChild.nextSibling);'
+      dialog.insertBefore(h3Element, dialog.firstChild.nextSibling);
+      dialog.insertBefore(divElement, dialog.lastChild.nextSibling);'
     )
   },ignoreNULL = FALSE, once = TRUE)
   
@@ -47,22 +52,21 @@ function(input, output, session) {
       document.querySelector(".skin-black .main-sidebar").setAttribute("style", "visibility:visible")'
     )
   })
-
-  # 2 - Body ----------------------------------------------------------------
-
-  # * 2.0 Render Menu -------------------------------------------------------
+  
+  # * 2 Render Menu -------------------------------------------------------
 
   output$menu <- renderMenu({
     req(login_result())
     
-    shinyjs::show("map_1_show")
+    shinyjs::show("map_show")
     
     sidebarMenu(
       menuItem(
-        text = 'map', 
-        icon = icon('users'),
-        menuSubItem(text = 'map 1', tabName = 'map_1', icon = icon('users'))
+        text    = 'Species Locations', 
+        icon    = icon('map-location-dot'),
+        tabName = 'map'
       ),
+      hr(),
       div(
         actionBttn(
           inputId = 'data_source',
@@ -76,8 +80,97 @@ function(input, output, session) {
           block = TRUE
         ),
         align = 'center'
+      ),
+      div(
+        actionBttn(
+          inputId = 'linkedin',
+          label   = a(
+            href   = 'https://www.linkedin.com/in/ignacio-arganaraz-arriazu/?locale=en_US',
+            target = '_blank',
+            HTML("<i class='fa-brands fa-linkedin'></i> LinkedIn")
+          ),
+          style = 'bordered',
+          size  = 'xs',
+          block = TRUE
+        ),
+        align = 'center'
+      ),
+      div(
+        actionBttn(
+          inputId = 'github',
+          label   = a(
+            href   = 'https://github.com/IgnacioArga/Biodiversity',
+            target = '_blank',
+            HTML("<i class='fa-brands fa-github'></i> Github Repo")
+          ),
+          style = 'bordered',
+          size  = 'xs',
+          block = TRUE
+        ),
+        align = 'center'
+      ),
+      div(
+        actionBttn(
+          inputId = 'appsilon',
+          label   = a(
+            href   = 'https://appsilon.com/',
+            target = '_blank',
+            HTML("<img src='images/appsilon.png' style='height: 30px'></img> Appsilon Page")
+          ),
+          style = 'bordered',
+          size  = 'xs',
+          block = TRUE
+        ),
+        align = 'center'
       )
     )
+  })
+  
+
+  # 3 - Data ----------------------------------------------------------------
+
+  countries <- reactive({
+    req(login_result())
+    timestamp("countries")
+    
+    progressSweetAlert(
+      session     = session,
+      id          = "progress_update_country",
+      title       = tagList("Looking for countries...", loadingState()),
+      display_pct = TRUE,
+      value       = 0,
+      striped     = TRUE,
+      status      = "primary"
+    )
+    countries <- DBI::dbGetQuery(
+      conn = pool_bq,
+      "SELECT DISTINCT country
+          FROM `personal-cloud-397320.Biodiversity.Occurrence`;"
+    )
+    updateSelectizeInput(
+      session  = session,
+      inputId  = "country",
+      choices  = countries$country,
+      selected = "Poland",
+      options  = list(
+        placeholder  = "Select Country...",
+        onInitialize = I('function() { this.setValue(""); }'),
+        maxItems     = 1,
+        highlight    = FALSE
+      ),
+      server = TRUE
+    )
+    updateProgressBar(
+      session = session,
+      id      = "progress_update_country",
+      value   = 100,
+      status  = "success"
+    )
+    
+    Sys.sleep(0.5)
+    closeSweetAlert(session = session)
+    
+    return(countries)
   })
   
   # 1 - Map --------------------
@@ -85,9 +178,11 @@ function(input, output, session) {
   # * 1. map 1 --------------------------------------------------------
   
   map_server(
-    id            = "map_1_mod",
+    id            = "map_mod",
     connection_bq = pool_bq,
-    login_result  = login_result
+    login_result  = login_result,
+    countries     = countries,
+    input_country = reactive(input$country)
   )
   
   

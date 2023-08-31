@@ -5,9 +5,9 @@ dashboardPage(
   title = "GBIF Report",
   freshTheme = create_theme(
     adminlte_global(
-      content_bg  = "#fcfcfc !important",
-      box_bg      = "#ffffff !important",
-      info_box_bg = "#ffffff !important"
+      content_bg  = "#fcfcfc",
+      box_bg      = "#ffffff",
+      info_box_bg = "#ffffff"
     ),
     adminlte_sidebar(
       dark_bg                  = "#396c3b",  # Verde predominante
@@ -46,6 +46,20 @@ dashboardPage(
         style = "color: #55862d;"
       ),
       "GBIF Report"
+    ),
+    leftUi = tagList(
+      dropdownButton(
+        circle = FALSE,
+        status = "success",
+        size = "default",
+        label = "Change Location",
+        icon = icon("plane-departure"),
+        selectizeInput(
+          inputId = "country",
+          label   = "Country:",
+          choices = NULL
+        )
+      )
     )
   ),
   
@@ -57,7 +71,7 @@ dashboardPage(
     useSweetAlert(),
     useSever(),
     tags$head(tags$link(rel = "shortcut icon", href = "favicon.ico")),
-    use_googlefont("Quicksand"),
+    use_googlefont("Roboto"),
     sidebarMenuOutput("menu")
   ),
   
@@ -72,11 +86,11 @@ dashboardPage(
     # * 1. map 1 --------------------------------------------------------
     
     tabItem(
-      tabName = "map_1",
+      tabName = "map",
       hidden(
         div(
-          id = "map_1_show",
-          map_ui(id = "map_1_mod")
+          id = "map_show",
+          map_ui(id = "map_mod")
         )
       )
     )
