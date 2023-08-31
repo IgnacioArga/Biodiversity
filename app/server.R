@@ -31,8 +31,8 @@ function(input, output, session) {
       
       let dialog = document.querySelector("#shiny-modal");
       
-      h1Element.textContent = "Welcome to the Global Biodiversity Information Facility report ";
-      h3Element.innerHTML = "Follow me on  <a target=\\”_blank\\” href=\\"https://www.linkedin.com/in/ignacio-arganaraz-arriazu/?locale=en_US\\"> <i class=\\"fa-brands fa-linkedin\\"></i></a> <a target=\\”_blank\\” href=\\"https://github.com/IgnacioArga\\"> <i class=\\"fa-brands fa-github\\"></i></a>";
+      h1Element.textContent = "Welcome to the Global Biodiversity Information Facility Report";
+      h3Element.innerHTML = "Find me on  <a target=\\”_blank\\” href=\\"https://www.linkedin.com/in/ignacio-arganaraz-arriazu/?locale=en_US\\"> <i class=\\"fa-brands fa-linkedin\\"></i></a> <a target=\\”_blank\\” href=\\"https://github.com/IgnacioArga\\"> <i class=\\"fa-brands fa-github\\"></i></a>";
       divElement.innerHTML = "Mountain bluebird [<i>Sialia currucoides</i> (Bechstein, 1798)] in 1962 at Gardner Lake, Wyoming, USA by Donald L. Pattie. Via the Philip L. Wright Zoological Museum."; 
       
       h1Element.style.textAlign = "center";

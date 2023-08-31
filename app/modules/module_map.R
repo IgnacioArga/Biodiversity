@@ -13,34 +13,39 @@ map_ui <- function(id) {
   
   tagList(
     fluidRow(
-      box(
-        title       = HTML("Filter Parameters"),
-        status      = "danger",
-        width       = 3,
-        solidHeader = FALSE,
-        collapsible = FALSE,
-        collapsed   = FALSE,
-        radioGroupButtons(
-          inputId = ns("specie_name"),
-          label = "Specie:",
-          choices = c("Scientific Name", "Vernacular Name"),
-          checkIcon = list(
-            yes = tags$i(
-              class = "fa fa-check-square", 
-              style = "color: steelblue"
-            ),
-            no = tags$i(
-              class = "fa fa-square-o", 
-              style = "color: steelblue"
+      column(
+        width = 3,
+        box(
+          title       = HTML("Filter Parameters"),
+          status      = "success",
+          width       = NULL,
+          solidHeader = FALSE,
+          collapsible = FALSE,
+          collapsed   = FALSE,
+          radioGroupButtons(
+            inputId = ns("specie_name"),
+            label = "Specie:",
+            choices = c("Scientific Name", "Vernacular Name"),
+            checkIcon = list(
+              yes = tags$i(
+                class = "fa fa-check-square", 
+                style = "color: steelblue"
+              ),
+              no = tags$i(
+                class = "fa fa-square-o", 
+                style = "color: steelblue"
+              )
             )
-          )
+          ),
+          selectizeInput(
+            inputId  =  ns("specie"),
+            label    = NULL,
+            choices  = NULL
+          ) %>%
+            shiny::tagAppendAttributes(style = 'width: 100%;')
         ),
-        selectizeInput(
-          inputId  =  ns("specie"),
-          label    = NULL,
-          choices  = NULL
-        ) %>%
-          shiny::tagAppendAttributes(style = 'width: 100%;')
+        valueBoxOutput(outputId = ns("box_species"), width = NULL),
+        valueBoxOutput(outputId = ns("box_occurrence"), width = NULL)
       ),
       tabBox(
         title = NULL,
@@ -284,6 +289,37 @@ map_server <- function(id,
           )
         )
       }, server = TRUE)
+
+      # 4 - Box -----------------------------------------------------------------
+      
+      output$box_species <- renderValueBox({
+        
+        data_box <- if (input$specie_name == "Vernacular Name") {
+          filtered_data()$vernacularName %>% unique() %>% length()
+        } else {
+          filtered_data()$scientificName %>% unique() %>% length()
+        }
+        
+        valueBox(
+          value = format(data_box, big.mark = ","),
+          subtitle = "Total Species",
+          icon = icon("leaf"),
+          color = "green"
+        )
+      })
+      
+      output$box_occurrence <- renderValueBox({
+        
+        data_box <- filtered_data() %>% nrow()
+        
+        valueBox(
+          value = format(data_box, big.mark = ","),
+          subtitle = "Total Occurrence",
+          icon = icon("eye"),
+          color = "green"
+        )
+      })
+      
 
       # 5 - Input Validator -----------------------------------------------------
 
