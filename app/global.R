@@ -15,8 +15,9 @@ config <- config::get(
 libraries <- list(
   "Reproduccion" = list("renv", "config"),
   "Shiny Core"   = list("shiny", "shinydashboard"),
-  "Shiny Extras" = list("shinyjs", "shinyWidgets", "shinydashboardPlus", "sever", "fresh"),
+  "Shiny Extras" = list("shinyjs", "shinyWidgets", "shinydashboardPlus", "sever", "fresh", "shinyvalidate"),
   "Tables"       = list("DT"),
+  "Plot"         = list("leaflet"),
   "DDBB"         = list("pool", "bigrquery"),
   "Tidyverse"    = list("tibble", "dplyr")
 )
@@ -53,3 +54,10 @@ pool_bq <- pool::dbPool(
 # 4 - Modules -------------------------------------------------------------
 
 invisible(lapply(list.files(path = "modules", full.names = TRUE), source))
+
+# 5 - Closing APP ----------------------------------------------------------
+
+onStop(function() {
+  pool::poolClose(pool_bq)
+})
+

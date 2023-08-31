@@ -1,3 +1,14 @@
+/* font */
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Roboto Light'), local('Roboto-Light'), url(https://themes.googleusercontent.com/static/fonts/roboto/v9/Pru33qjShpZSmG3z6VYwnT8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
+body, .skin-black, .main-header .logo, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, * {
+  font-family: 'Roboto';
+}
 /* login setings*/
 
 .skin-black .left-side, .skin-black .main-sidebar, .skin-black .wrapper {
@@ -11,4 +22,55 @@
   background-size: cover;
   transition-duration: 10000ms;
   transition-property: background-image;
+}
+
+.img_caption {
+    font-size: 14px;
+    position: absolute;
+    right: 0;
+    bottom: 0;s
+    padding: 5px 10px 0;
+    color: #fff
+}
+
+.img_caption a {
+    color: inherit
+}
+
+.img_caption:hover {
+    color: #fff;
+    background: rgba(0,0,0,.3)
+}
+
+/* head */
+
+header > span, header > nav {
+  background-color: #ebf6e1 !important;
+}
+
+/* sidebar settings */
+
+#menu > div button {
+  width: 88%;
+}
+
+.sidebar-collapse #menu > div {
+  padding: 12px 0px 12px 0px;
+}
+
+.sidebar-collapse #menu > div:hover {
+  background-color: #2E4C61;
+}
+
+.sidebar-collapse #menu > div button {
+  font-size: 0;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
+
+.sidebar-collapse #menu > div button .fa, .sidebar-collapse #menu > div button .fa-brands{ 
+  font-size: initial; 
+  width: 20px;
 }
