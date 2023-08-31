@@ -2,6 +2,23 @@
 
 Welcome to the Biodiversity Data Visualization App repository! This Shiny application is designed to help you explore and visualize biodiversity observations sourced from the Global Biodiversity Information Facility (GBIF). The app allows you to interactively analyze occurrence sightings of flora and fauna, including information about species, location, date, and more. 
 
+## Table of Contents
+
+- [Data Source](#data-source)
+- [Application Overview](#application-overview)
+  - [Module 1: Species Location](#module-1-species-location)
+  - [Module 2: Time Line](#module-2-time-line)
+- [Extras Utilized](#extras-utilized)
+  - [1. Beautiful UI Skill](#1-beautiful-ui-skill)
+  - [2. Performance Optimization Skill](#2-performance-optimization-skill)
+  - [3. JavaScript Skill](#3-javascript-skill)
+  - [4. Infrastructure Skill](#4-infrastructure-skill)
+- [Next Steps](#next-steps)
+  - [1. Refine Deployment and Infrastructure](#1-refine-deployment-and-infrastructure)
+  - [2. Optimize Data Sources and Authentication](#2-optimize-data-sources-and-authentication)
+  - [3. Multimedia Integration](#3-multimedia-integration)
+- [Getting Started](#getting-started)
+
 ## Data Source
 
 The biodiversity data used in this application is sourced from the **Global Biodiversity Information Facility (GBIF)**. It comprises a vast collection of occurrence records, including sightings of various species, each accompanied by details such as country, scientific name, common name, date, time, latitude, and longitude. The primary database table contains an impressive 39,969,765 rows and 37 columns.
@@ -66,7 +83,29 @@ Infrastructure skills were employed to ensure efficient deployment and scaling o
 
 Feel free to explore the rich features of this application, designed with attention to aesthetics, performance, and user interaction. If you have any feedback or encounter any issues, please consider contributing or opening an issue in this repository. Your insights are valuable in further enhancing this biodiversity data visualization tool.
 
-## Getting Started
+## Next Steps
+
+As this Biodiversity Data Visualization App continues to evolve, there are several exciting directions you can consider for its enhancement:
+
+### 1. Refine Deployment and Infrastructure
+
+**Goal:** Correct build issues and successfully deploy the application on Google Cloud Platform (GCP) for seamless access.
+
+- **GCP Deployment**: Address any issues related to the build process and successfully deploy the application on GCP. This will ensure that the app is accessible to a wider audience while benefiting from the scalability and resources of the cloud platform.
+
+### 2. Optimize Data Sources and Authentication
+
+**Goal:** Improve data sourcing and authentication mechanisms for a more robust and efficient experience.
+
+- **Diverse Data Sources**: While BigQuery is excellent for handling large datasets, consider integrating with other data sources like Cloud SQL for scenarios that involve smaller tables, such as user authentication. This can enhance the app's overall performance and align data storage mechanisms with their appropriate use cases.
+
+### 3. Multimedia Integration
+
+**Goal:** Enrich the user experience by incorporating multimedia elements into the application.
+
+- **Multimedia Display**: Utilize the "Multimedia" table to showcase images related to selected species. Enhance user engagement by providing visual representations of the observed species, further enriching the exploration of biodiversity.
+
+# Getting Started
 
 To run the app locally, follow these steps:
 
