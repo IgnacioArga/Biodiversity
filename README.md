@@ -39,6 +39,7 @@ The login module acts as the app's entry point, verifying user credentials again
 - **Reactive Control**: Main dashboard content loads only after successful login.
 
 The module ensures secure data access, requiring valid credentials before users can interact with biodiversity data. 
+![image](https://github.com/IgnacioArga/Biodiversity/assets/62559949/f4412242-b1b2-4942-8b56-461a6ce4658e)
 
 ### Module 2: Species Location
 
@@ -47,10 +48,12 @@ The first module focuses on presenting the geographical distribution of observat
 1. **Geographic Map**: This tab displays a dynamic map with markers representing the observation locations. Each marker is color-coded based on the species observed. The map provides an intuitive visualization of the species distribution across different geographical regions.
 
 2. **Detailed Table**: In this tab, a table is presented that provides detailed information about the observations. You can filter observations by species, whether by their scientific name or common name. The table can be customized and sorted according to your preferences.
+![image](https://github.com/IgnacioArga/Biodiversity/assets/62559949/6c9cca4c-cbd4-4944-82c6-87b5ab878590)
 
 ### Module 3: Time Line
 
 The second module is designed to facilitate the analysis of sightings over time. You can explore observations based on different timeframes, such as year, month, or hour. This module also features filtering options similar to those in Module 1, allowing you to refine the data to your specific interests.
+![image](https://github.com/IgnacioArga/Biodiversity/assets/62559949/a5840a23-4a0a-48a9-a236-eb33475eacf0)
 
 ## Extras Utilized
 
@@ -69,8 +72,9 @@ The UI of this application has been enhanced using CSS to provide an appealing a
 To optimize the performance of the application, the following strategies were employed:
 
 - **Working with Full Data**: The application works with the entirety of the dataset. The data was imported into Google Cloud Platform's BigQuery via Cloud Storage, utilizing a project in GCP.
+![image](https://github.com/IgnacioArga/Biodiversity/assets/62559949/a0fe9ef3-f5af-46bf-a8d1-1429e97384bd)
 
-- **Utilizing Google BigQuery**: To establish a connection between Shiny and BigQuery, a service account for BigQuery with data editor and data viewer roles was created. The corresponding key was downloaded and stored securely within the app's 'gcp' folder. The `bigrquery` and `pool` packages were employed to facilitate a connection to the database.
+- **Utilizing Google BigQuery**: To establish a connection between Shiny and BigQuery, a service account for BigQuery with data editor and data viewer roles was created in IAM. The corresponding key was downloaded and stored securely within the app's 'gcp' folder. The `bigrquery` and `pool` packages were employed to facilitate a connection to the database.
 
 - **Two-Stage Filtering**: To enhance the app's responsiveness, filtering was divided into two stages. The first stage involves the global filter for countries. Upon modification, it recalculates information specific to the chosen country. Simultaneously, filtering by species is performed using the available country-specific information. This approach significantly improves dashboard performance, particularly when filtering by species or using timeline filters.
 
@@ -91,6 +95,7 @@ Por supuesto, aquí tienes una versión resumida que destaca que la aplicación 
 - **Containerization with Docker**: A Docker container was crafted with files like `Dockerfile` and `cloudbuild.yml`. This encapsulated the app's dependencies and ensured consistent behavior across environments.
 
 - **Cloud Build Integration**: Google Cloud Build was used to build the Docker container, automating deployment and enhancing efficiency.
+![image](https://github.com/IgnacioArga/Biodiversity/assets/62559949/05a453c9-5b6c-485a-9ea0-61f5c577aa87)
 
 - **Deployment with Cloud Run**: The app was deployed on Google Cloud Run, offering auto-scaling and serverless capabilities for flexible hosting.
 
