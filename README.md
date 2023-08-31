@@ -6,8 +6,9 @@ Welcome to the Biodiversity Data Visualization App repository! This Shiny applic
 
 - [Data Source](#data-source)
 - [Application Overview](#application-overview)
-  - [Module 1: Species Location](#module-1-species-location)
-  - [Module 2: Time Line](#module-2-time-line)
+  - [Module 1: Login](#module-1-login)
+  - [Module 2: Species Location](#module-2-species-location)
+  - [Module 3: Time Line](#module-3-time-line)
 - [Extras Utilized](#extras-utilized)
   - [1. Beautiful UI Skill](#1-beautiful-ui-skill)
   - [2. Performance Optimization Skill](#2-performance-optimization-skill)
@@ -27,7 +28,19 @@ The biodiversity data used in this application is sourced from the **Global Biod
 
 Upon accessing the application, you will be greeted with a login screen. Once your credentials are verified, the main Shiny dashboard will be displayed. In the sidebar, there are two tabItems, each representing a distinct module, and four actionable buttons. In the header there is a global filter, which allows you to dynamically modify the country being visualized in all the dashboard.
 
-### Module 1: Species Location
+### Module 1: Login
+
+The login module acts as the app's entry point, verifying user credentials against the database for secure access. Its functionality includes:
+
+- **Authentication**: Users input their username and password.
+- **Credential Verification**: Entered credentials are checked against the database.
+- **Access Control**: Successful login grants access to the main dashboard.
+- **Error Handling**: Incorrect credentials trigger a modal error message.
+- **Reactive Control**: Main dashboard content loads only after successful login.
+
+The module ensures secure data access, requiring valid credentials before users can interact with biodiversity data. 
+
+### Module 2: Species Location
 
 The first module focuses on presenting the geographical distribution of observation points. This module is divided into two subtabs:
 
@@ -35,7 +48,7 @@ The first module focuses on presenting the geographical distribution of observat
 
 2. **Detailed Table**: In this tab, a table is presented that provides detailed information about the observations. You can filter observations by species, whether by their scientific name or common name. The table can be customized and sorted according to your preferences.
 
-### Module 2: Time Line
+### Module 3: Time Line
 
 The second module is designed to facilitate the analysis of sightings over time. You can explore observations based on different timeframes, such as year, month, or hour. This module also features filtering options similar to those in Module 1, allowing you to refine the data to your specific interests.
 
@@ -71,17 +84,17 @@ JavaScript was incorporated to address specific UI elements that couldn't be eas
 
 - **Enhanced User Experience**: JavaScript enables users to press the 'Enter' key during login, treating it as a confirmation button click for a smoother user experience.
 
+Por supuesto, aquí tienes una versión resumida que destaca que la aplicación no pudo ser montada en Google Cloud Platform (GCP):
+
 ### 4. Infrastructure Skill
 
-Infrastructure skills were employed to ensure efficient deployment and scaling of the application:
+- **Containerization with Docker**: A Docker container was crafted with files like `Dockerfile` and `cloudbuild.yml`. This encapsulated the app's dependencies and ensured consistent behavior across environments.
 
-- **Docker and Cloud Build**: A Docker container was created and built using Cloud Build. The deployment was managed through Cloud Run. Files like `Dockerfile` and `cloudbuild.yml` were used in this process.
+- **Cloud Build Integration**: Google Cloud Build was used to build the Docker container, automating deployment and enhancing efficiency.
 
-- **Cloud Run Deployment**: The application was deployed on Cloud Run, leveraging the built Docker container. This method provides a scalable and efficient environment for hosting the application.
+- **Deployment with Cloud Run**: The app was deployed on Google Cloud Run, offering auto-scaling and serverless capabilities for flexible hosting.
 
-- **Deployment Considerations**: While the application is available for viewing on Shiny.io, it's worth noting that challenges were encountered when deploying the container with a restored `renv` library environment. Due to these challenges, the application is currently accessible via a Shiny.io link.
-
-Feel free to explore the rich features of this application, designed with attention to aesthetics, performance, and user interaction. If you have any feedback or encounter any issues, please consider contributing or opening an issue in this repository. Your insights are valuable in further enhancing this biodiversity data visualization tool.
+- **Library Restoration Challenges**: Despite efforts, issues arose when attempting to restore libraries using the `renv` package. Consequently, successful deployment on GCP was not achieved. The app is currently accessible via a Shiny.io link as a workaround.
 
 ## Next Steps
 
