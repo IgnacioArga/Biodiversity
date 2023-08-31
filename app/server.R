@@ -33,7 +33,7 @@ function(input, output, session) {
       
       h1Element.textContent = "Welcome to the Global Biodiversity Information Facility Report";
       h3Element.innerHTML = "Find me on  <a target=\\”_blank\\” href=\\"https://www.linkedin.com/in/ignacio-arganaraz-arriazu/?locale=en_US\\"> <i class=\\"fa-brands fa-linkedin\\"></i></a> <a target=\\”_blank\\” href=\\"https://github.com/IgnacioArga\\"> <i class=\\"fa-brands fa-github\\"></i></a>";
-      divElement.innerHTML = "Mountain bluebird [<i>Sialia currucoides</i> (Bechstein, 1798)] in 1962 at Gardner Lake, Wyoming, USA by Donald L. Pattie. Via the Philip L. Wright Zoological Museum."; 
+      divElement.innerHTML = "Autor: <a target=\\”_blank\\” href=\\"https://unsplash.com/es/@hansjurgen007\\">Hans-Jurgen Mager</a>"; 
       
       h1Element.style.textAlign = "center";
       h3Element.style.textAlign = "center";
@@ -53,18 +53,21 @@ function(input, output, session) {
     )
   })
   
-  # * 2 Render Menu -------------------------------------------------------
-
+  # 2 - Render Menu -------------------------------------------------------
+  
   output$menu <- renderMenu({
     req(login_result())
-    
-    shinyjs::show("map_show")
     
     sidebarMenu(
       menuItem(
         text    = 'Species Locations', 
         icon    = icon('map-location-dot'),
         tabName = 'map'
+      ),
+      menuItem(
+        text    = 'Time Line', 
+        icon    = icon('chart-line'),
+        tabName = 'timeline'
       ),
       hr(),
       div(
@@ -168,15 +171,16 @@ function(input, output, session) {
       status  = "success"
     )
     
-    Sys.sleep(0.5)
+    Sys.sleep(0.2)
     closeSweetAlert(session = session)
     
     return(countries)
   })
   
-  # 1 - Map --------------------
-  
-  # * 1. map 1 --------------------------------------------------------
+
+  # 4 - Tabs ----------------------------------------------------------------
+
+  # * 1. Map ----------------------------------------------------------------
   
   map_server(
     id            = "map_mod",
@@ -185,12 +189,19 @@ function(input, output, session) {
     countries     = countries,
     input_country = reactive(input$country)
   )
-  
+
+  # * 2. Time Line ----------------------------------------------------------
+
+  timeline_server(
+    id            = "timeline_mod",
+    connection_bq = pool_bq,
+    login_result  = login_result,
+    countries     = countries,
+    input_country = reactive(input$country)
+  )
   
   # 5 - Input Validator -----------------------------------------------------
   
   iv <- InputValidator$new()
   iv$add_rule("country", sv_required(message = "You must select a country"))
-  
-  
 }

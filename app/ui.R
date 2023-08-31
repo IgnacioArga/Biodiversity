@@ -10,12 +10,9 @@ dashboardPage(
       info_box_bg = "#ffffff"
     ),
     adminlte_sidebar(
-      dark_bg                  = "#396c3b",  # Verde predominante
-      dark_hover_bg            = "#2b5230",  # Verde más oscuro para el hover
-      dark_color               = "#d6d2d9",
-      dark_submenu_bg          = "#000000",  # Verde oscuro para los submenús
-      dark_submenu_color       = "#b2b2b2",
-      dark_submenu_hover_color = "#ffffff"
+      dark_bg                  = "#396c3b",
+      dark_hover_bg            = "#2b5230", 
+      dark_color               = "#d6d2d9"
     ),
     adminlte_color(
       light_blue = "#31749B",
@@ -37,7 +34,7 @@ dashboardPage(
     )
   ),
   
-  # Cabecera ----------------------------------------------------------------
+  # Head ----------------------------------------------------------------
   
   header = dashboardHeader(
     title = div(
@@ -63,7 +60,7 @@ dashboardPage(
     )
   ),
   
-  # Barra Izquierda ---------------------------------------------------------
+  # Sidebar ---------------------------------------------------------
   
   sidebar = dashboardSidebar(
     includeCSS("www/styles.css"),
@@ -75,23 +72,18 @@ dashboardPage(
     sidebarMenuOutput("menu")
   ),
   
-  # Cuerpo ------------------------------------------------------------------
+  # Body ------------------------------------------------------------------
   
   body = dashboardBody(
-    login_ui("login"),  
-    # CONTENIDO TABS --------------------
-    
-    # 2 - map -----------------------------------------------------------
-    
-    # * 1. map 1 --------------------------------------------------------
-    
-    tabItem(
-      tabName = "map",
-      hidden(
-        div(
-          id = "map_show",
-          map_ui(id = "map_mod")
-        )
+    login_ui("login"),
+    tabItems(
+      tabItem(
+        tabName = "map",
+        map_ui(id = "map_mod")
+      ),
+      tabItem(
+        tabName = "timeline",
+        timeline_ui(id = "timeline_mod")
       )
     )
   )# cierra el body del dashboard

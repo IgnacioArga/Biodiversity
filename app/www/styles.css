@@ -16,7 +16,7 @@ body, .skin-black, .main-header .logo, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h
 }
 
 #shiny-modal {
-  background-image: url('//api.gbif.org/v1/image/unsafe/1500x750/http:%2F%2Fimages.ctfassets.net%2Fuo17ejk9rkwj%2F1PsclS0lrJHDGHoSdd0Mz4%2F9797496d803cb4a0903ac3c1f6441c60%2Fimage.png');
+  background-image: url('images/login-background.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -28,7 +28,7 @@ body, .skin-black, .main-header .logo, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h
     font-size: 14px;
     position: absolute;
     right: 0;
-    bottom: 0;s
+    bottom: 0;
     padding: 5px 10px 0;
     color: #fff
 }
