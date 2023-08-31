@@ -6,6 +6,7 @@ Imports:
     bigrquery,
     dplyr,
     leaflet,
+    plotly,
     sever,
     shiny,
     shinydashboard,

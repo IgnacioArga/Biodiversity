@@ -1,9 +1,3 @@
-# Exportar funciones ------------------------------------------------------
-
-#' @export login_ui
-#' @export login_server
-NULL
-
 #' Module UI: Login
 #'
 #' @param id Id
@@ -77,12 +71,6 @@ login_server <- function(id,
         )
       })
       
-      # * 1 - Cancelar ----------------------------------------------------------
-      
-      # observeEvent(input$cancel, {
-      #   session$reload()
-      # })
-      
       # 3 - Login ---------------------------------------------------------------
       
       observeEvent(input$login, {
@@ -100,6 +88,17 @@ login_server <- function(id,
           req(input$user, input$password)
         }
         
+        progressSweetAlert(
+          session     = session,
+          id          = "progress_data",
+          title       = tagList("Checking credentials...", loadingState()),
+          display_pct = TRUE,
+          value       = 0,
+          striped     = TRUE,
+          status      = "primary"
+        )
+        
+        
         data <- DBI::dbGetQuery(
           conn = connection_bq,
           glue::glue(
@@ -114,6 +113,14 @@ login_server <- function(id,
             password = input$password
           )
         )
+        
+        updateProgressBar(
+          session = session,
+          id      = "progress_data",
+          value   = 100,
+          status  = "success"
+        )
+        removeModal()
         
         if (rlang::is_null(data) || nrow(data) == 0) {
           sendSweetAlert(
